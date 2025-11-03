@@ -16,6 +16,11 @@ COPY src/ ./src/
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
+# Install PyTorch CPU-only first to avoid CUDA bloat (~10GB saved)
+RUN uv pip install --system --no-cache \
+    torch --index-url https://download.pytorch.org/whl/cpu
+
+# Install package dependencies
 RUN uv pip install --system --no-cache -e .
 
 # Configure guardrails with local models (no runtime dependencies on Guardrails Hub)
