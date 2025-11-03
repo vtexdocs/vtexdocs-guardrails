@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vtexdocs-guardrails"
+version = "0.1.0"
+description = "Jailbreak detection guardrails service for VTEX Docs AI agents"
+authors = [{name = "VTEX Docs Team"}]
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = [
+  "guardrails-ai>=0.5.10",
+  "flask>=3.0.0",
+  "gunicorn>=21.0.0",
+  "pydantic>=2.0.0",
+  "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=7.0",
+  "pytest-asyncio>=0.21.0",
+  "requests>=2.32.0",
+]
+
+[project.scripts]
+vtexdocs-guardrails = "vtexdocs_guardrails.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
