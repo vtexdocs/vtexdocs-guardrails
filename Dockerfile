@@ -1,5 +1,9 @@
 FROM python:3.11-slim
 
+# Build arg for Guardrails Hub token (required for installing validators)
+# Get a free token at: https://hub.guardrailsai.com/tokens
+ARG GUARDRAILS_TOKEN
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     git \
@@ -14,8 +18,9 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 RUN uv pip install --system --no-cache -e .
 
-RUN guardrails configure --enable-metrics --enable-remote-inferencing --token "" && \
-    guardrails hub install hub://guardrails/detect_jailbreak
+# Configure guardrails with local models (no runtime dependencies on Guardrails Hub)
+RUN guardrails configure --enable-metrics --disable-remote-inferencing --token "${GUARDRAILS_TOKEN}" && \
+    guardrails hub install hub://guardrails/detect_jailbreak --install-local-models
 
 RUN useradd --create-home --shell /bin/bash --uid 1000 guardrails && \
     chown -R guardrails:guardrails /app

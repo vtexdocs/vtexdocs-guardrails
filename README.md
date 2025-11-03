@@ -13,15 +13,25 @@ Jailbreak detection service for VTEX Docs AI agents using Guardrails AI Hub.
 
 ## Quick Start
 
+### Prerequisites
+
+**Guardrails Hub Token (One-time setup)**
+
+You need a free token from Guardrails Hub to download validators during the build:
+
+1. Sign up for a free account at https://hub.guardrailsai.com/
+2. Get your token at https://hub.guardrailsai.com/tokens
+3. The token is only needed during build/installation - no runtime dependencies
+
 ### Local Development
 
 ```bash
 # Install dependencies
 pip install -e ".[test]"
 
-# Configure guardrails
-guardrails configure --token ""
-guardrails hub install hub://guardrails/detect_jailbreak
+# Configure guardrails with your token
+guardrails configure --token "YOUR_TOKEN_HERE"
+guardrails hub install hub://guardrails/detect_jailbreak --install-local-models
 
 # Run server
 python -m vtexdocs_guardrails.server
@@ -32,9 +42,14 @@ Server will be available at `http://localhost:8082`
 ### Docker
 
 ```bash
-docker build -t vtexdocs-guardrails .
+# Build with your Guardrails Hub token
+docker build --build-arg GUARDRAILS_TOKEN="YOUR_TOKEN_HERE" -t vtexdocs-guardrails .
+
+# Run
 docker run -p 8082:8082 vtexdocs-guardrails
 ```
+
+**Note**: The token is only used during the Docker build to download the jailbreak detection model. Once built, the image runs completely offline with no external dependencies.
 
 ## API Reference
 
