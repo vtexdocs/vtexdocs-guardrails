@@ -14,7 +14,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 RUN uv pip install --system --no-cache -e .
 
-RUN guardrails configure --enable-metrics --token "" && \
+RUN guardrails configure --enable-metrics --enable-remote-inferencing --token "" && \
     guardrails hub install hub://guardrails/detect_jailbreak
 
 RUN useradd --create-home --shell /bin/bash --uid 1000 guardrails && \
